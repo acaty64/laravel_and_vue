@@ -19,7 +19,7 @@ class ApiNoteTest extends TestCase
     			'category_id' => $category->category_id
     		]);
     	
-    	$this->get('api/v1/notes')
+    	$this->get('api/notes')
     		->assertStatus(200)
     		->assertExactJson($notes->toArray());
     }

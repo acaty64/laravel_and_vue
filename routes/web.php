@@ -23,6 +23,3 @@ Route::get('name', function () {
 	return User::first()->name;
 });
 
-Route::get('api/v1/notes', function () {
-	return Note::all();
-});

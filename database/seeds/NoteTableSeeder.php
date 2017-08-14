@@ -1,5 +1,7 @@
 <?php
 
+use App\Category;
+use App\Note;
 use Illuminate\Database\Seeder;
 
 class NoteTableSeeder extends Seeder
@@ -13,7 +15,7 @@ class NoteTableSeeder extends Seeder
     {
         $categories = Category::all();
 
-        $notes = factory(App\Note::class)->times(20)->make();
+        $notes = factory(Note::class)->times(20)->make();
 
         foreach ($notes as $note) {
         	$category = $categories->random();

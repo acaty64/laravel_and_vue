@@ -1,5 +1,6 @@
 <?php
 
+use App\Category;
 use Illuminate\Database\Seeder;
 
 class CategoryTableSeeder extends Seeder
@@ -11,9 +12,9 @@ class CategoryTableSeeder extends Seeder
      */
     public function run()
     {
-        App\Category::create(['name' => 'Laravel']);
-        App\Category::create(['name' => 'Vue.js']);
-        App\Category::create(['name' => 'PHP']);
-        App\Category::create(['name' => 'JS']);
+        Category::create(['name' => 'Laravel']);
+        Category::create(['name' => 'Vue.js']);
+        Category::create(['name' => 'PHP']);
+        Category::create(['name' => 'JS']);
     }
 }
