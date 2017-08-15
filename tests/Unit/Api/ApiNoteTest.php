@@ -47,27 +47,26 @@ class ApiNoteTest extends TestCase
 
     }
 
-    /* NO ES NECESARIO, NO PERMITE note = ''
     function test_validation_when_creating_a_note()
     {
-        $category = factory(Category::class)->create();
+        //$category = factory(Category::class)->create();
         
         $this->post('api/notes', [
             'note'          => '',
-            'category_id'   => ''
-            ])
+            'category_id'   => 100
+            ], ['Accept'=>'application/json'])
             ->assertExactJson([
                 'success' => false,
                 'errors'  => [
                     'The note field is required.',
-                    'The selected category is invalid.'
+                    'The selected category id is invalid.'
                 ]
             ]);
-        
+//{"category_id":["The selected category id is invalid."],"note":["The note field is required."]}
         $this->assertDatabaseMissing('notes',[
             'note'          => ''
         ]);
 
-    }*/
+    }
 
 }
