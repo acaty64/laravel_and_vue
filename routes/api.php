@@ -1,5 +1,6 @@
 <?php
 
+use App\Category;
 use App\Note;
 use Illuminate\Http\Request;
 
@@ -20,10 +21,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 */
 
-Route::resource('notes', 'Api\NoteController');
+Route::resource('notes', 'Api\NoteController', [
+	'parameters' => [
+		'notes' => 'note'
+	],
+]);
 
-/*
-Route::get('/notes', function () {
-	return Note::all();
+Route::get('categories', function()
+{
+	return Category::all();
 });
-*/

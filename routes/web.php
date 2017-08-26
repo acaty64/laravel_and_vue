@@ -23,3 +23,7 @@ Route::get('name', function () {
 	return User::first()->name;
 });
 
+Route::get('notes', function ()
+{
+	return view('notes');
+});

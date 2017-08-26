@@ -69,4 +69,13 @@ class ApiNoteTest extends TestCase
 
     }
 
+    function test_list_categories()
+    {
+        $categories = factory(Category::class)->times(3)->create();
+
+        $this->get('api/categories')
+            ->assertStatus(200)
+            ->assertExactJson($categories->toArray());
+    }
+
 }
