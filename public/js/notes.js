@@ -47,20 +47,13 @@ Vue.component('note-row',  {
       update: function () {
          this.errors = [];
 
-         $.ajax({
-            url: '/api/notes/'+this.note.id,
-            method: 'PUT',
-            data: this.draft,
-            dataType: 'json',
-            success: function (data) {
-               this.$parent.notes.$set(this.$parent.notes.indexOf(this.note), data.note);
+         this.$http.put('/api/notes/'+this.note.id, this.draft)
+            .then(function (response) {
+               this.$parent.notes.$set(this.$parent.notes.indexOf(this.note), response.data.note);
                this.editing = false;
-            }.bind(this),
-            error: function (jqXHR) {
-               this.errors = jqXHR.responseJSON.errors;
-            }.bind(this),
-         });
-
+            }, function (response) {
+               this.errors = response.data.errors;
+            });
       },
 
       remove: function () {
@@ -92,13 +85,15 @@ var vm = new Vue({
    },
 
    ready: function () {
+      // Por defecto GET
+      this.$http.get('/api/notes')
+         .then(function (response) {
+            this.notes = response.data;
+         });  
 
-      $.getJSON('/api/notes', [], function (notes) {
-             vm.notes = notes;
-         });
-
-      $.getJSON('/api/categories', [], function (categories) {
-             vm.categories = categories;
+      this.$http.get('/api/categories')
+         .then(function (response) {
+            this.categories = response.data;
          });
 
    },
@@ -107,11 +102,13 @@ var vm = new Vue({
       createNote: function () {
          this.errors = [];
 
-         this.$http.post('/api/notes', this.new_note).then(function (response) {
-            this.notes.push(response.data.note);
-         }, function (response) {
-            this.errors = response.data.errors;
+         this.$http.post('/api/notes', this.new_note)
+            .then(function (response) {
+               this.notes.push(response.data.note);
+            }, function (response) {
+               this.errors = response.data.errors;
          });
+
          this.new_note = {note:'', category_id:''};
       }
    },

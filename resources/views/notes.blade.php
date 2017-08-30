@@ -89,15 +89,9 @@
 	</template>
 
     @endverbatim
-	<script
-	  src="https://code.jquery.com/jquery-3.2.1.js"
-	  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
-	  crossorigin="anonymous">
-	</script>
-    <script src={{url("js/vue.js")}}></script>
-    <script 
-    	src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.1/vue-resource.js" type="text/javascript">
-    </script>
-    <script src={{url("js/notes.js")}}></script>
+	<script src={{url("js/jquery-3.2.1.min.js")}} ></script>
+    <script src={{url("js/vue.js")}} ></script>
+    <script src={{url("js/vue-resource.min.js")}} ></script>
+    <script src={{url("js/notes.js")}} ></script>
 
 @endsection
