@@ -7,6 +7,9 @@ function findById(items, id) {
    return null;
 }
 
+// Definimos el recurso (resource) de forma global (fuera del vm)
+var resource;
+
 Vue.filter('category', function (id) {
    var category = findById(this.categories, id);
    return category != null ? category.name : 'sin categoria';  
@@ -47,21 +50,24 @@ Vue.component('note-row',  {
       update: function () {
          this.errors = [];
 
-         this.$http.put('/api/notes/'+this.note.id, this.draft)
+         // declaramos una variable (component) que apunta al objeto this
+         var component = this;
+
+         resource.update({id: this.note.id}, this.draft)
             .then(function (response) {
-               this.$parent.notes.$set(this.$parent.notes.indexOf(this.note), response.data.note);
-               this.editing = false;
+               this.notes.$set(this.notes.indexOf(component.note), response.data.note);
+               component.editing = false;
             }, function (response) {
-               this.errors = response.data.errors;
+               component.errors = response.data.errors;
             });
       },
 
       remove: function () {
-         this.$http.delete('/api/notes/'+this.note.id).then(function (response) {
-            alert('Registro eliminado: '+this.note.id);
-            this.$parent.notes.$remove(this.note);
-         }, function (response) {
-            this.errors = response.data.errors;
+         var component = this;
+
+         resource.delete({id: this.note.id}).then(function (response) {
+            alert('Registro eliminado: '+component.note.id);
+            this.notes.$remove(component.note);
          });
       },
 
@@ -81,12 +87,15 @@ var vm = new Vue({
       notes: [],
       errors: [],
       categories: [],
+      error: '',
    
    },
 
    ready: function () {
-      // Por defecto GET
-      this.$http.get('/api/notes')
+      // Declaramos el recurso
+      resource = this.$resource('/api/notes{/id}');
+      
+      resource.get()
          .then(function (response) {
             this.notes = response.data;
          });  
@@ -96,13 +105,39 @@ var vm = new Vue({
             this.categories = response.data;
          });
 
+
+
+      Vue.http.interceptors.push({
+
+         request: function (request) {
+             return request;
+         },
+
+         response: function (response) {
+             if (response.ok) {
+                 return response;
+             }
+
+             $('#error_message').show();
+
+             this.error = response.data.message;
+
+             $('#error_message').delay(3000).fadeOut(1000, function () {
+                 this.error = '';
+             });
+
+             return response;
+         }.bind(this)
+
+      });
+
    },
 
    methods: {
       createNote: function () {
          this.errors = [];
 
-         this.$http.post('/api/notes', this.new_note)
+         resource.save({}, this.new_note)
             .then(function (response) {
                this.notes.push(response.data.note);
             }, function (response) {

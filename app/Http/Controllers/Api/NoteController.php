@@ -82,6 +82,7 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
+        //abort(500, 'Something is wrong !!!');
 //Ejemplo:        abort_if($note->category_id==3, 403, 'No tienes permiso para eliminar esta nota', ['Accept'=>'application/json']); // Modificar Handler
 
         $note->delete();
